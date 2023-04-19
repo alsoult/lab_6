@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercise_1</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      input {
+        margin: 18px;
+        padding: 10px;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+        border-radius: 10px;
+        color: rgba(18, 18, 18, 95%);
+        background-color: #e7e7e7;
+        border: 3px solid #d1d1d1;
+        font-weight: bolder;
+        font-size: 21px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <input
+      id="getInfoBtn"
+      value="Получить информацию об объекте"
+      onclick="getInfoOfObj()"
+      type="button"
+    />
+    <script>
+      let arrOfObj = [],
+        emptyLine,
+        negNum,
+        notNum,
+        countOfObj,
+        cancel;
+
+      do {
+        emptyLine = false;
+        negNum = false;
+        notNum = false;
+        countOfObj = prompt("Введите количество объектов:", 0);
+        try {
+          if (countOfObj == "") {
+            emptyLine = true;
+            throw new Error(
+              "Поле ввода не содержит значения. Необходимо ввести число."
+            );
+          }
+          if (countOfObj == null || countOfObj == "0") {
+            break;
+          }
+          if (parseInt(countOfObj) < 0) {
+            negNum = true;
+            throw new Error(
+              "Количество не может быть отрицательным значением. Введите неотрицательное число."
+            );
+          }
+          if (isNaN(countOfObj)) {
+            notNum = true;
+            throw new Error(
+              "Введено нечисловое значение. Необходимо ввести число."
+            );
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      } while (emptyLine || negNum || notNum);
+
+      if (countOfObj != null && countOfObj != "0") {
+        countOfObj = parseInt(countOfObj);
+        cancel = false;
+        for (let i = 0; i < countOfObj; i++) {
+          alert(`Введите свойства ${i + 1}-го объекта.`);
+          arrOfObj[i] = {};
+          arrOfObj[i].connectionInterface = prompt(
+            "Интерфейс подключения:",
+            ""
+          );
+          if (arrOfObj[i].connectionInterface == null) {
+            cancel = true;
+            break;
+          }
+          arrOfObj[i].purpose = prompt("Назначение:", "");
+          if (arrOfObj[i].purpose == null) {
+            cancel = true;
+            break;
+          }
+          arrOfObj[i].sensorType = prompt("Тип сенсора:", "");
+          if (arrOfObj[i].sensorType == null) {
+            cancel = true;
+            break;
+          }
+          arrOfObj[i].sensorModel = prompt("Модель сенсора:", "");
+          if (arrOfObj[i].sensorModel == null) {
+            cancel = true;
+            break;
+          }
+          arrOfObj[i].maxDPI = prompt("Максимальное разрешение сенсора:", "");
+          if (arrOfObj[i].maxDPI == null) {
+            cancel = true;
+            break;
+          }
+          arrOfObj[i].getInfo = function () {
+            document.write(
+              `<div id="content" style="margin: 10px; padding: 10px; \
+                border-radius: 10px; color: rgba(18, 18, 18, 95%); background-color: #e7e7e7; \
+                width: fit-content; font-family: 'Trebuchet MS', sans-serif; font-size: 21px;"><div class="info" style="font-weight: bolder; margin-bottom: 10px; \
+                border-bottom: 2px solid rgba(18, 18, 18, 95%); font-size: 32px;">Объект №${
+                  i + 1
+                }
+                </div><div class="info" style="margin-bottom: 5px;">Интерфейс подключения: <span style="font-weight: bolder;">${
+                  this.connectionInterface
+                }</span></div><div class="info" style="margin-bottom: 5px;">Назначение: <span style="font-weight: bolder;">${
+                this.purpose
+              }</span></div><div class="info" style="margin-bottom: 5px;">Тип сенсора: <span style="font-weight: bolder;">${
+                this.sensorType
+              }</span></div><div class="info" style="margin-bottom: 5px;">Модель сенсора: <span style="font-weight: bolder;">${
+                this.sensorModel
+              }</span></div><div class="info">Максимальное разрешение сенсора: <span style="font-weight: bolder;">${
+                this.maxDPI
+              }</span></div></div>`
+            );
+          };
+        }
+
+        if (!cancel) {
+          let clickCounter = 0;
+          function getInfoOfObj() {
+            let numOfObj, outOfRage;
+
+            clickCounter++;
+            do {
+              emptyLine = false;
+              outOfRage = false;
+              notNum = false;
+              numOfObj = prompt(
+                "Введите номер объекта, информацию о котором Вы хотите узнать:",
+                1
+              );
+              try {
+                if (numOfObj == "") {
+                  emptyLine = true;
+                  throw new Error(
+                    "Поле ввода не содержит значения. Необходимо ввести число."
+                  );
+                }
+                if (parseInt(numOfObj) < 1 || parseInt(numOfObj) > countOfObj) {
+                  outOfRage = true;
+                  throw new Error(
+                    "Номер объекта вне нужного диапазона. Необходимо ввести число от 1 до " +
+                      countOfObj +
+                      "."
+                  );
+                }
+                if (isNaN(numOfObj)) {
+                  notNum = true;
+                  throw new Error(
+                    "Введено нечисловое значение. Необходимо ввести число."
+                  );
+                }
+              } catch (error) {
+                alert(error.message);
+              }
+            } while (emptyLine || outOfRage || notNum);
+
+            if (numOfObj != null) {
+              if (clickCounter == 1) {
+                document.write(
+                  "<input id='getInfoBtn' value='Получить информацию об объекте' onclick='getInfoOfObj()' type='button' />"
+                );
+
+                document.getElementById("getInfoBtn").setAttribute(
+                  "style",
+                  "margin: 10px; \
+                  padding: 10px; \
+                  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; \
+                  border-radius: 10px; \
+                  color: rgba(18, 18, 18, 95%); \
+                  background-color: #e7e7e7; \
+                  border: 3px solid #d1d1d1; \
+                  font-weight: bolder; \
+                  font-size: 21px; \
+                  cursor: pointer;"
+                );
+              }
+            } else if (clickCounter == 1) {
+              clickCounter = 0;
+            }
+
+            for (let i = 0; i < countOfObj; i++) {
+              if (i == numOfObj - 1) {
+                arrOfObj[i].getInfo();
+              }
+            }
+          }
+        } else {
+          document.querySelector("#getInfoBtn").remove();
+        }
+      } else {
+        document.querySelector("#getInfoBtn").remove();
+      }
+    </script>
+  </body>
+</html>
